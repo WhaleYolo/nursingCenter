@@ -1,0 +1,210 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+ Microsoft YaHei, '\5FAE\8F6F\96C5\9ED1', Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: 0.5s;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+.index-contanner{
+  height: 100%;
+  width: 100%;
+}
+
+.index-contanner .el-container .el-header{
+  position: fixed;
+  top: 0;
+  height: 60px;
+  width: 100%;
+  background-color: rgb(50, 155, 223);
+  display: flex;
+  padding: 0;
+  z-index: 999;
+}
+.el-header .left-box{
+  display: flex;
+}
+.el-header .left-box > div {
+  height: 60px;
+  width: 200px;
+}
+.el-header .left-box img {
+  width: 100%;
+  height: 60px;
+}
+.el-header .mid-box {
+  display: flex;
+  position: absolute;
+  top: 10px;
+  left: 400px;
+}
+.el-header .mid-box .el-button{
+  background-color:rgb(50, 155, 223);
+  color:black;
+  border:none;
+  font-size:18px;
+  color:white
+}
+.el-header .right-box  {
+  display: flex;
+  position: absolute;
+  top: 10px;
+  right: 40px;
+}
+.index-contanner .el-container .el-aside{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .2);
+  position: fixed;
+  left: 0;
+  margin-top: 60px;
+  height: 100%;
+  background-color:rgb(245, 247, 250);
+}
+.el-container .el-aside .el-submenu__title,
+.el-container .el-aside .el-menu-item,
+.el-menu .el-menu--inline{
+  width: 200px;
+}
+.el-submenu__icon-arrow{
+  font-size: 16px !important;
+}
+.el-aside .el-menu-item.is-active {
+  background: rgb(204, 204, 204) !important;
+}
+.index-contanner .el-container .el-main{
+  margin-top: 60px;
+  margin-left:200px ;
+  padding: 0;
+}
+/* .el-container .el-main .main-index:before{
+  position: absolute;
+  width: 1266px !important;
+  height: 582px;
+  background: url(./images/bg2.jpg)  ;
+  content: "";
+  background-size:cover;
+  z-index: -1;
+  -webkit-filter: blur(1px);
+  filter: blur(1px);
+} */
+.el-container .el-main .main-index{
+  width: 100%;
+  height: 582px;
+  background: url(./images/bg2.jpg)  ;
+  background-size:cover;
+}
+
+/* 首页简介*/
+.el-container .el-main .main-index .description{
+  margin-left: 80px;
+  width: 400px;
+  height: 400px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 0 6px rgba(0, 0, 0, .1)
+}
+.el-container .el-main .main-index .description .header{
+  width: 100%;
+  height: 60px;
+  font-size: 24px;
+  text-align: center;
+  line-height: 60px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 0 6px rgba(0, 0, 0, .2)
+ 
+}
+.el-container .el-main .main-index .description .main{
+  width: 100%;
+  height: 340px;
+  overflow: hidden;
+  padding: 15px;
+  font-size: 21px;
+  font-weight: bold;
+  font-family: 'KaiTi';
+  line-height: 1.4em;
+}
+
+.main-index .text{
+  font-family: "Dosis", sans-serif;
+  font-size: 80px;
+  text-align: auto;
+  margin-left: 30px;
+  font-weight: bold;
+  line-height:150px;
+  text-transform:uppercase;
+  position: relative;
+}
+.main-index .effect06{
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 4px #4e5e57;
+  background-size: cover;
+}
+.text-shadow {
+  margin: 0 0 30px 30px;
+  font-size: 80px;
+  color: #ffffff;
+  text-shadow: -1px -1px white, 1px 1px gray, 2px 2px #7a7a7a, 3px 3px #757575, 4px 4px #707070, 5px 5px #6b6b6b, 6px 6px #666666, 7px 7px #616161, 8px 8px #5c5c5c, 9px 9px #575757, 10px 10px #525252, 11px 11px #4d4d4d, 18px 18px 30px rgba(0, 0, 0, 0.4), 18px 18px 10px rgba(0, 0, 0, 0.4);
+}
+.main-container{
+  padding: 40px;
+}
+.login{
+  width: 100%; 
+  height: 100%;
+  background: url(./images/login.jpg) no-repeat;
+}
+.login .login-main{
+  width: 400px;
+  margin: 0 auto;
+  transform: translateX(-50px);
+}
+.login .login-main .el-main{
+  padding: 0;
+}
+.login .login-main .el-form-item__label{
+  font-size: 16px;
+  color: #ffffff;
+}
+.login .login-main .el-main .change-link{
+  margin-left: 240px;
+  margin-bottom: 5px;
+}
+
+.login .head{
+  margin: 0 auto;
+  width: 300px;
+  height: 100px;
+  margin-top: 20px;
+  background-image: -webkit-linear-gradient(left,blue,#66ffff 10%,#cc00ff 20%,#CC00CC 30%, #CCCCFF 40%, #00FFFF 50%,#CCCCFF 60%,#CC00CC 70%,#CC00FF 80%,#66FFFF 90%,blue 100%);
+  -webkit-text-fill-color: transparent;/* 将字体设置成透明色 */
+  -webkit-background-clip: text;/* 裁剪背景图，使文字作为裁剪区域向外裁剪 */
+  -webkit-background-size: 100% 100%; 
+  -webkit-animation: masked-animation 4s linear infinite;
+  font-size: 35px;
+}
+@keyframes masked-animation {
+  0% {
+      background-position: 0  0;
+  }
+  100% {
+      background-position: -100%  0;
+  }
+}
+#app {
+  display: flex;
+  height: 100%;
+}
+
