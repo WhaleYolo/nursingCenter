@@ -13,16 +13,16 @@
               <el-input v-model="form.c_id"></el-input>
             </el-form-item>
             <el-form-item label="客户姓名">
-              <el-input v-model="form.c_name" readonly="true"></el-input>
+              <el-input v-model="form.c_name" readonly></el-input>
             </el-form-item>
             <el-form-item label="身份证号">
-              <el-input v-model="form.p_id" readonly="true"></el-input>
+              <el-input v-model="form.p_id" readonly></el-input>
             </el-form-item>
             <el-form-item label="性别">
-              <el-input v-model="form.c_gender" readonly="true"></el-input>
+              <el-input v-model="form.c_gender" readonly></el-input>
             </el-form-item>
             <el-form-item label="年龄">
-              <el-input v-model="form.c_age" readonly="true"></el-input>
+              <el-input v-model="form.c_age" readonly></el-input>
             </el-form-item>
             <el-form-item label="退住时间" prop="stay_back_date">
               <el-col>
@@ -55,13 +55,13 @@
         </el-table-column>
         <el-table-column prop="c_name" label="客户姓名" width="90">
         </el-table-column>
-        <el-table-column prop="p_id" label="身份号" width="160">
+        <el-table-column prop="p_id" label="身份号" width="170">
         </el-table-column>
         <el-table-column prop="c_gender" label="性别" width="80">
         </el-table-column>
         <el-table-column prop="c_age" label="年龄" width="80">
         </el-table-column>
-        <el-table-column prop="c_telephone" label="电话" width="100">
+        <el-table-column prop="c_telephone" label="电话" width="110">
         </el-table-column>
         <el-table-column prop="stay_back_date" label="退住时间" width="100">
         </el-table-column>
@@ -153,6 +153,7 @@ export default {
             data: this.form,
             headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
+            console.log(res.data);
             if (res.data.code == 200 || res.data.code == 201) {
               console.log("测试1" + res.data.data);
               this.$message({

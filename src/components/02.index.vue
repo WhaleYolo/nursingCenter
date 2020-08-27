@@ -59,7 +59,6 @@
                     <span>康复管理</span>
                   </template>
                   <el-menu-item index="/recure/recurePlan">康复计划</el-menu-item>
-                  <el-menu-item index="/recure/recureStatus">康复情况</el-menu-item>
                 </el-submenu>
                 <!-- 膳食管理 -->
                 <el-submenu index="4">

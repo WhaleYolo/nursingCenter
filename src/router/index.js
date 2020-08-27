@@ -6,7 +6,6 @@ const checkin = () => import('../views/customer/checkin.vue')
 const checkout = () => import('../views/customer/checkout.vue')
 const customerInfo = () => import('../views/customer/customerInfo.vue')
 const recurePlan = () => import('../views/recure/recurePlan.vue')
-const recureStatus = () => import('../views/recure/recureStatus.vue')
 const bedInfo = () => import('../views/bed/bedInfo.vue')
 const foodRecord = () => import('../views/food/foodRecord.vue')
 const nursingInfo = () => import('../views/nursing/nursingInfo.vue')
@@ -57,11 +56,6 @@ const routes = [
     component: recurePlan
   },
   {
-    path: '/recure/recureStatus',
-    name: 'recureStatus',
-    component: recureStatus
-  },
-  {
     path: '/bed/bedInfo',
     name: 'bedInfo',
     component: bedInfo
@@ -104,7 +98,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

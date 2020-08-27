@@ -44,7 +44,7 @@
               <el-input v-model="form.c_id"></el-input>
             </el-form-item>
             <el-form-item label="客户姓名">
-              <el-input v-model="form.c_name" readonly="true"></el-input>
+              <el-input v-model="form.c_name" readonly></el-input>
             </el-form-item>
             <el-form-item label="楼层号">
               <el-input v-model="form.floor_number" readonly></el-input>
