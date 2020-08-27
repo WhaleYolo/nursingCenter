@@ -158,11 +158,11 @@ export default {
         if (valid) {
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/diet/save',
+            url: '/diet/save',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
@@ -190,12 +190,12 @@ export default {
     getList() {
       this.$axios({
         method: "get",
-        url: "http://localhost:8080/diet/list",
+        url: "/diet/list",
         headers: { Authorization: sessionStorage.getItem("token") },
       }).then((res) => {
-        //console.log(res.data)
+        ////console.log(res.data)
         this.dietData = res.data.data;
-        //console.log(this.checkinData[0])
+        ////console.log(this.checkinData[0])
       });
     },
 
@@ -215,23 +215,12 @@ export default {
   //   'form.diet_id': {
   //     handler: function () {
   //       //do something
-  //       //console.log(this.form.c_id);
+  //       ////console.log(this.form.c_id);
   //     },
   //   }
   // },
   created() {
     this.getList();
-  },
-  filters: {
-    dateFormat: function (val) {
-      let date = new Date(val);
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      month = month >= 10 ? month : "0" + month;
-      day = day >= 10 ? day : "0" + day;
-      return year + "-" + month + "-" + day;
-    },
   },
 };
 </script>

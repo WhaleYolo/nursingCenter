@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Element from 'element-ui'
 const home = () => import('../views/home')
 const login = () => import(/* webpackChunkName: "discovery" */ '../views/login')
 const checkin = () => import('../views/customer/checkin.vue')
@@ -38,62 +39,73 @@ const routes = [
     path: '/customer/checkin',
     name: 'checkin',
     component: checkin,
-    //meta: { requiresAuth: true }
+    meta: { requiresAuth: true }
   },
   {
     path: '/customer/checkout',
     name: 'checkout',
-    component: checkout
+    component: checkout,
+    meta: { requiresAuth: true }
   },
   {
     path: '/customer/customerInfo',
     name: 'customerInfo',
-    component: customerInfo
+    component: customerInfo,
+    meta: { requiresAuth: true }
   },
   {
     path: '/recure/recurePlan',
     name: 'recurePlan',
-    component: recurePlan
+    component: recurePlan,
+    meta: { requiresAuth: true }
   },
   {
     path: '/bed/bedInfo',
     name: 'bedInfo',
-    component: bedInfo
+    component: bedInfo,
+    meta: { requiresAuth: true }
   },
   {
     path: '/food/foodRecord',
     name: 'foodRecord',
-    component: foodRecord
+    component: foodRecord,
+    meta: { requiresAuth: true }
   },
   {
     path: '/nursing/nursingItem',
     name: 'nursingItem',
-    component: nursingItem
+    component: nursingItem,
+    meta: { requiresAuth: true }
   },
   {
     path: '/nursing/nursingInfo',
     name: 'nursingInfo',
-    component: nursingInfo
+    component: nursingInfo,
+    meta: { requiresAuth: true }
   },
   {
     path: '/staff/doctor',
     name: 'doctor',
-    component: doctor
+    component: doctor,
+    meta: { requiresAuth: true }
   },
   {
     path: '/staff/nurse',
     name: 'nurse',
-    component: nurse
+    component: nurse,
+    meta: { requiresAuth: true }
   },
   {
     path: '/staff/nursingWorker',
     name: 'nursingWorker',
-    component: nursingWorker
+    component: nursingWorker,
+    meta: { requiresAuth: true }
   },
   {
     path: '/user/userInfo',
     name: 'userInfo',
-    component: userInfo
+    component: userInfo,
+    meta: { requiresAuth: true }
   }
 ]
 
@@ -102,5 +114,24 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) { // 判断该路由是否需要登录权限
+    const token = sessionStorage.getItem("token")
+    if (token) { // 判断当前的token是否存在 ； 登录存入的token
+      next()
+    } else {
+      if (to.path === '/login') {
+        next()
+      } else {
+        Element.Message.error('请您先登录', { duration: 3 * 1000 })
+        next('/login')
+      }
+    }
+  } else {
+    next()
+  }
+})
+
 
 export default router

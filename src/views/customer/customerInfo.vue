@@ -2,10 +2,10 @@
   <div class="main-container">
     <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
       <div>
-        <el-input prefix-icon="el-icon-search" type="text" style="width:200px" placeholder="输入客户编号..." v-model="findId"
-          clearable>
+        <el-input prefix-icon="el-icon-search" type="text" style="width:200px" placeholder="输入客户姓名..."
+          v-model="findName" clearable>
         </el-input>
-        <el-button style="margin:0 30px" type="success">提交</el-button>
+        <el-button style="margin:0 30px" type="success" @click="findByName">提交</el-button>
         <el-button type="primary" @click="dialogVisible = true">添加客户</el-button>
         <!-- 弹出框 -->
         <el-dialog title="登记入住" :visible.sync="dialogVisible" width="30%" v-if="dialogVisible" @close='closeDialog'>
@@ -29,7 +29,7 @@
               <el-input v-model="form.c_telephone"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="insert('form')">登记入住</el-button>
+              <el-button type="primary" @click="insert('form')">保存</el-button>
               <el-button @click="cancel">取消</el-button>
             </el-form-item>
           </el-form>
@@ -51,7 +51,8 @@
         <el-table-column label="操作" width="220">
           <template slot-scope="scope">
             <el-button type="success" size="small" @click="update(scope.row)">编辑</el-button>
-            <el-button v-if="$store.getters.getAdmin" type="danger" size="small">删除</el-button>
+            <el-button v-if="$store.getters.getAdmin" type="danger" @click="deleteInfo(scope.row)" size="small">删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,7 +66,7 @@ export default {
   data() {
     return {
       customerData: [],
-      findId: '',
+      findName: '',
       dialogVisible: false,
       form: {
         c_name: '',
@@ -104,30 +105,35 @@ export default {
   },
   methods: {
     findByName() {
-      console.log(this.findName);
+      //console.log(this.findName);
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/customer/find?name=' + this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/customer/findByName?name=' + this.findName,
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
         console.log(res.data);
         if (res.data.code == 200) {
           this.customerData = res.data.data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
         }
       })
     },
     insert(formname) {
-      console.log(1111);
+      //console.log(1111);
       this.$refs[formname].validate((valid) => {
         if (valid) {
-          console.log(222);
+          //console.log(222);
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/customer/save',
+            url: '/customer/insert',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
@@ -152,37 +158,41 @@ export default {
       this.form = row
     },
     deleteInfo(row) {
+      console.log(row);
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        // console.log(row.customer_id);
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/customer/delete/' + row.customer_id,
-          date: row.customer_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
+          url: '/customer/delete/' + row.c_id,
+          date: row.c_id,
+          //headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
+          console.log(res.data);
           this.$message({
             type: 'success',
             message: res.data.message
           });
+          this.getList()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
         });
-        this.getList()
+
       });
     },
     getList() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/customer/list',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/customer/list',
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data)
+        //console.log(res.data)
         this.customerData = res.data.data
       })
     },
@@ -200,17 +210,7 @@ export default {
   created() {
     this.getList()
   },
-  filters: {
-    dateFormat: function (val) {
-      let date = new Date(val)
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      month = month >= 10 ? month : '0' + month
-      day = day >= 10 ? day : '0' + day
-      return year + '-' + month + '-' + day
-    }
-  }
+
 }
 </script>
 

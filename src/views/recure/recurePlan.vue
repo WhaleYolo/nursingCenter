@@ -25,7 +25,7 @@
               <el-input type="textarea" v-model="form.r_content"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="insert('form')">提交</el-button>
+              <el-button type="primary" @click="insert('form')">保存</el-button>
               <el-button @click="cancel">取消</el-button>
             </el-form-item>
           </el-form>
@@ -64,7 +64,7 @@ export default {
   data() {
     var cidValidate = (rule, value, callback) => {
       if (!this.iscidExist) {
-        console.log(this.iscidExist);
+        //console.log(this.iscidExist);
         callback(new Error('当前客户编号不存在'))
       } else {
         callback()
@@ -115,31 +115,36 @@ export default {
   },
   methods: {
     findByName() {
-      console.log(this.findName);
+      //console.log(this.findName);
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/rehabilitation/find?name=' + this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/rehabilitation/find?name=' + this.findName,
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data.code == 200) {
           this.recureData = res.data.data
-          //console.log(this.checkinData);
+          ////console.log(this.checkinData);
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
         }
       })
     },
     insert(formname) {
-      // console.log(this.form)
+      // //console.log(this.form)
 
       this.$refs[formname].validate((valid) => {
         if (valid) {
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/rehabilitation/insert',
+            url: '/rehabilitation/insert',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
@@ -176,9 +181,9 @@ export default {
       }).then(() => {
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/rehabilitation/delete/' + row.plan_id,
+          url: '/rehabilitation/delete/' + row.plan_id,
           date: row.plan_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
+          //headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
           if (res.data.code === 200) {
             this.$message({
@@ -198,12 +203,12 @@ export default {
     getList() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/rehabilitation/list',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/rehabilitation/list',
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data)
+        //console.log(res.data)
         this.recureData = res.data.data
-        //console.log(this.checkinData[0])
+        ////console.log(this.checkinData[0])
       })
     },
     cancel() {
@@ -223,18 +228,18 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/customer/findById/?id=' + this.form.c_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/customer/findById/?id=' + this.form.c_id,
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
               this.form.c_name = res.data.data.c_name
               this.iscidExist = true
             } else {
               this.iscidExist = false
-              console.log(this.iscidExist);
+              //console.log(this.iscidExist);
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         } else {
           this.form.c_name = ''
@@ -246,17 +251,17 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/staff/findById/?id=' + this.form.staff_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/staff/findById/?id=' + this.form.staff_id,
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
               this.isStaffExist = true
             } else {
               this.isStaffExist = false
-              console.log(this.iscidExist);
+              //console.log(this.iscidExist);
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         }
       },
@@ -267,17 +272,6 @@ export default {
     this.isAdmin = this.$store.getters.getAdmin;
     this.getList();
   },
-  filters: {
-    dateFormat: function (val) {
-      let date = new Date(val)
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      month = month >= 10 ? month : '0' + month
-      day = day >= 10 ? day : '0' + day
-      return year + '-' + month + '-' + day
-    }
-  }
 }
 </script>
 

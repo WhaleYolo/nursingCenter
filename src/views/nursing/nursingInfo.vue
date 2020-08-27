@@ -151,16 +151,21 @@ export default {
   },
   methods: {
     findByName() {
-      console.log(this.findName);
+      //console.log(this.findName);
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/nursingRecords/findByName?c_name=' + this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/nursingRecords/findByName?c_name=' + this.findName,
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data.code == 200) {
           this.nursingInfoData = res.data.data
-          //console.log(this.checkinData);
+          ////console.log(this.checkinData);
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
         }
       })
     },
@@ -169,12 +174,12 @@ export default {
         if (valid) {
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/nursingRecords/save',
+            url: '/nursingRecords/save',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
 
-            //console.log(res.data);
+            ////console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
@@ -207,9 +212,9 @@ export default {
       }).then(() => {
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/nursingRecords/delete/' + row.nursing_id,
+          url: '/nursingRecords/delete/' + row.nursing_id,
           date: row.nursing_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
+          //headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
           this.$message({
             type: 'success',
@@ -229,12 +234,12 @@ export default {
     getList() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/nursingRecords/list',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/nursingRecords/list',
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        //console.log(res.data)
+        ////console.log(res.data)
         this.nursingInfoData = res.data.data
-        //console.log(this.checkinData[0])
+        ////console.log(this.checkinData[0])
       })
     },
 
@@ -256,8 +261,8 @@ export default {
       if (this.findName.length == 0) {
         this.getList()
       }
-      //console.log(this.findName.length);
-      //console.log(this.$refs.passWords.value.length);
+      ////console.log(this.findName.length);
+      ////console.log(this.$refs.passWords.value.length);
     },
   },
 
@@ -281,10 +286,10 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/customer/findById/?id=' + this.form.c_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/customer/findById/?id=' + this.form.c_id,
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
               this.form.c_name = res.data.data.c_name
               this.iscidExist = true
@@ -292,11 +297,11 @@ export default {
               this.iscidExist = false
               this.form.c_name = ''
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         }
         //do something
-        // console.log(this.form.c_id);
+        // //console.log(this.form.c_id);
       },
     },
     'form.nursing_item_id': {
@@ -304,12 +309,12 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/nursing/findById/?id=' + this.form.nursing_item_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/nursing/findById/?id=' + this.form.nursing_item_id,
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
-              console.log(res.data);
+              //console.log(res.data);
               this.form.nursing_item_name = res.data.data.nursing_name
               this.form.nursing_content = res.data.data.nursing_content
               this.isItemIdExist = true
@@ -318,11 +323,11 @@ export default {
               this.form.nursing_item_name = ''
               this.form.nursing_content = ''
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         }
         //do something
-        // console.log(this.form.c_id);
+        // //console.log(this.form.c_id);
       },
     },
     'form.staff_id': {
@@ -330,23 +335,23 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/staff/findById/?id=' + this.form.staff_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/staff/findById/?id=' + this.form.staff_id,
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
-              console.log(res.data);
+              //console.log(res.data);
               this.form.staff_name = res.data.data.staff_name
               this.isSidExist = true
             } else {
               this.isItemIdExist = false
               this.form.staff_name = ''
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         }
         //do something
-        // console.log(this.form.c_id);
+        // //console.log(this.form.c_id);
       },
     }
   },

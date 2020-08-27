@@ -56,7 +56,7 @@
               <el-input v-model="form.bed_type" readonly></el-input>
             </el-form-item>
             <el-form-item label="床位状态">
-              <el-input v-model="form.bed_status"></el-input>
+              <el-input v-model="form.bed_status" readonly></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="update('form')">登记入住</el-button>
@@ -92,6 +92,9 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination pager-count='5' hide-on-single-page='true' class="page-class" background layout="prev, pager, next"
+        :page-size='size' :total="total" :current-page="currentPage" @current-change='changePage'>
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -102,7 +105,7 @@ export default {
   data() {
     var cidValidate = (rule, value, callback) => {
       if (!this.iscidExist) {
-        console.log(this.iscidExist);
+        //console.log(this.iscidExist);
         callback(new Error('当前客户编号不存在'))
       } else {
         callback()
@@ -124,6 +127,9 @@ export default {
       addBedDialog: false,
       findName: '',
       findID: '',//查询姓名
+      size: 10,//每次条数
+      total: 0,//总条数
+      currentPage: 1,//当前页数
       form: {
         c_id: '',
         c_name: '',
@@ -160,19 +166,23 @@ export default {
     dispach(row) {
       this.dialogVisible = true
       this.form = row
-      console.log(row);
+      //console.log(row);
     },
     findByName() {
-
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/bed_information/find?name=' + this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/bed_information/find?name=' + this.findName,
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data.code == 200) {
           this.bedData = res.data.data
-          //console.log(this.checkinData);
+          ////console.log(this.checkinData);
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
         }
       })
     },
@@ -188,17 +198,17 @@ export default {
           }
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/bed_information/insert',
+            url: '/bed_information/insert',
             data: this.bedform,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+
           }).then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
                 message: res.data.message
               });
-              this.getList()
+              this.changePage(this.currentPage)
             }
           })
           this.addBedDialog = false
@@ -218,34 +228,34 @@ export default {
       if (this.form.bed_status === '入住') {
         this.form.bed_status = 1
       }
-      console.log(this.form);
+      //console.log(this.form);
       this.$axios({
         method: 'post',
-        url: 'http://localhost:8080/bed_information/update',
+        url: '/bed_information/update',
         data: this.form,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data.code === 200 || res.data.code === 201) {
           this.$message({
             type: 'success',
             message: res.data.message
           });
-          this.getList()
-          // console.log("测试1" + res.data.data);
+          this.changePage(this.currentPage)
+          // //console.log("测试1" + res.data.data);
           // this.checkinData.push(res.data.data)
-          // console.log("测试2" + this.checkinData);
+          // //console.log("测试2" + this.checkinData);
         }
         else {
           this.$message({
             type: 'error',
             message: res.data.message
           });
-          this.getList()
+          this.changePage(this.currentPage)
         }
-        //console.log(res.data)
+        ////console.log(res.data)
         //this.checkinData = res.data.data
-        //  console.log(this.checkinData)
+        //  //console.log(this.checkinData)
       })
       this.dialogVisible = false
     },
@@ -257,15 +267,14 @@ export default {
       }).then(() => {
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/bed_information/delete/' + row.bed_id,
+          url: '/bed_information/delete/' + row.bed_id,
           date: row.bed_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
           this.$message({
             type: 'success',
             message: res.data.message
           });
-          this.getList()
+          this.changePage(this.currentPage)
         })
       }).catch(() => {
         this.$message({
@@ -274,26 +283,30 @@ export default {
         });
       });
     },
-    getList() {
+    changePage(currentPage) {
+      this.currentPage = currentPage
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/bed_information/list',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/bed_information/list?pageId=' + (currentPage - 1),
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
         console.log(res.data)
-        this.bedData = res.data.data
-        //console.log(this.checkinData[0])
+        this.bedData = res.data.data.content
+        this.total = res.data.data.totalElements
+        this.size = res.data.data.size
+        //this.bedData = res.data.data
+        ////console.log(this.checkinData[0])
       })
     },
     cancel() {
-      this.getList()
+      this.changePage(this.currentPage)
       this.dialogVisible = false;
       this.addBedDialog = false
       this.form = {}
       this.bedform = {}
     },
     closeDialog() {
-      this.getList()
+      this.changePage(this.currentPage)
       this.dialogVisible = false;
       this.addBedDialog = false
       this.form = {}
@@ -301,7 +314,8 @@ export default {
     }
   },
   created() {
-    this.getList()
+    //  this.getList()
+    this.changePage(1)
   },
   watch: {
     'form.c_id': {
@@ -309,10 +323,9 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/customer/findById/?id=' + this.form.c_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/customer/findById/?id=' + this.form.c_id,
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
               this.form.c_name = res.data.data.c_name
               this.form.bed_status = '入住'
@@ -320,14 +333,14 @@ export default {
             } else {
               this.iscidExist = false
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         } else {
           this.form.c_name = ''
           this.form.bed_status = '空闲'
         }
         //do something
-        // console.log(this.form.c_id);
+        // //console.log(this.form.c_id);
       },
     }
   },

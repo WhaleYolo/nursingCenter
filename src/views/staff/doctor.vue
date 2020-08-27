@@ -128,15 +128,20 @@ export default {
   },
   methods: {
     findByName() {
-      console.log(this.findName);
+      //console.log(this.findName);
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/staff/findDoctor?name=' + this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/staff/findDoctor?name=' + this.findName,
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data.code == 200) {
           this.staffData = res.data.data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
         }
       })
     },
@@ -145,18 +150,18 @@ export default {
         if (valid) {
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/staff/save',
+            url: '/staff/save',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
                 message: res.data.message
               });
               this.getList()
-              this.form={}
+              this.form = {}
             }
           })
           this.dialogVisible = false
@@ -180,9 +185,9 @@ export default {
       }).then(() => {
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/staff/delete/' + row.staff_id,
+          url: '/staff/delete/' + row.staff_id,
           date: row.staff_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
+          //headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
           this.$message({
             type: 'success',
@@ -200,10 +205,10 @@ export default {
     getList() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/staff/doctor',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/staff/doctor',
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        //console.log(res.data)
+        ////console.log(res.data)
         this.staffData = res.data.data
 
       })
@@ -226,25 +231,15 @@ export default {
       if (this.findName.length == 0) {
         this.getList()
       }
-      //console.log(this.findName.length);
-      //console.log(this.$refs.passWords.value.length);
+      ////console.log(this.findName.length);
+      ////console.log(this.$refs.passWords.value.length);
     },
   },
 
   created() {
     this.getList();
   },
-  filters: {
-    dateFormat: function (val) {
-      let date = new Date(val)
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      month = month >= 10 ? month : '0' + month
-      day = day >= 10 ? day : '0' + day
-      return year + '-' + month + '-' + day
-    }
-  }
+
 }
 </script>
 

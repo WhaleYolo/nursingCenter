@@ -34,7 +34,7 @@ export default {
       this.isLogin = true
     }
     this.$store.commit('SET_INDEX', true)
-    console.log(this.$store.getters.getAdmin);
+    //console.log(this.$store.getters.getAdmin);
   },
   filters: {
     dateFormat: function (val) {

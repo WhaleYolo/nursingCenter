@@ -84,7 +84,7 @@ export default {
   },
   watch: {
     isAdmin(newval, oldval) {
-      console.log(newval);
+      //console.log(newval);
       if (newval === false) {
         this.loginInfo = '点击切换到管理员登录'
       } else {
@@ -96,15 +96,15 @@ export default {
     submitUser(formName) {
       // 普通用户登录
 
-      console.log(this.userForm);
+      //console.log(this.userForm);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log('用户登录');
-          this.$axios.post('http://localhost:8080/login/check_user', this.userForm).then(res => {
-            console.log(res.data)
+          //console.log('用户登录');
+          this.$axios.post('/login/check_user', this.userForm).then(res => {
+            //console.log(res.data)
 
             // 获取
-            // console.log(this.$store.getters.getUser)
+            // //console.log(this.$store.getters.getUser)
             if (res.data.code === 200) {
               const jwt = res.headers.authorization
               const userInfo = res.data.data
@@ -124,7 +124,7 @@ export default {
 
           })
         } else {
-          console.log('error submit!!');
+          //console.log('error submit!!');
           return false;
         }
       });
@@ -133,13 +133,13 @@ export default {
       //管理员登录
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // console.log('管理员登录');
-          this.$axios.post('http://localhost:8080/login/check_admin', this.adminForm).then(res => {
-            // console.log(res.data)
+          // //console.log('管理员登录');
+          this.$axios.post('/login/check_admin', this.adminForm).then(res => {
+            // //console.log(res.data)
 
-            // console.log(this.isAdmin);
+            // //console.log(this.isAdmin);
             // 获取
-            // console.log(this.$store.getters.getUser)
+            // //console.log(this.$store.getters.getUser)
             if (res.data.code === 200) {
               const jwt = res.headers.authorization
               const userInfo = res.data.data
@@ -158,7 +158,7 @@ export default {
             }
           })
         } else {
-          console.log('error submit!!');
+          //console.log('error submit!!');
           return false;
         }
       });
@@ -170,7 +170,7 @@ export default {
   },
   created() {
     this.$store.commit('SET_INDEX', false)
-    //console.log(this.$store.getters.getIndex);
+    ////console.log(this.$store.getters.getIndex);
   },
 
 }

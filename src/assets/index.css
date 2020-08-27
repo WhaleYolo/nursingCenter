@@ -203,6 +203,11 @@ ol {
       background-position: -100%  0;
   }
 }
+
+.page-class{
+  margin: 0 auto;
+  text-align: center;
+}
 #app {
   display: flex;
   height: 100%;

@@ -24,7 +24,7 @@
             <el-form-item label="年龄">
               <el-input v-model="form.c_age" readonly></el-input>
             </el-form-item>
-            <el-form-item label="退住时间" prop="stay_back_date">
+            <el-form-item label="入住时间" prop="stay_back_date">
               <el-col>
                 <el-date-picker type="date" placeholder="选择日期" v-model="form.stay_back_date" style="width: 100%;">
                 </el-date-picker>
@@ -32,15 +32,15 @@
             </el-form-item>
             <el-form-item label="退住类型" prop="stay_back_type">
               <el-select v-model="form.stay_back_type" placeholder="请选择退住类型">
-                <el-option label="类型1" value="类型1"></el-option>
-                <el-option label="类型2" value="类型2"></el-option>
+                <el-option label="本人办理退住" value="本人办理退住"></el-option>
+                <el-option label="家属办理退住" value="家属办理退住"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="退住原因">
+            <el-form-item label="退住原因" prop="stay_back_reason">
               <el-input type="textarea" v-model="form.stay_back_reason"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="insert('form')">办理退住</el-button>
+              <el-button type="primary" @click="insert('form')">保存</el-button>
               <el-button @click="cancel">取消</el-button>
             </el-form-item>
           </el-form>
@@ -65,7 +65,7 @@
         </el-table-column>
         <el-table-column prop="stay_back_date" label="退住时间" width="100">
         </el-table-column>
-        <el-table-column prop="stay_back_type" label="退住类型" width="100">
+        <el-table-column prop="stay_back_type" label="退住类型" width="110">
         </el-table-column>
         <el-table-column prop="stay_back_reason" label="退住原因">
         </el-table-column>
@@ -108,9 +108,9 @@ export default {
         c_gender: '',
         c_age: '',
         c_telephone: '',
-        check_in_date: '',
-        check_in_type: '',
-        check_in_reason: '',
+        stay_back_date: '',
+        stay_back_type: '',
+        stay_back_reason: '',
       },
       rules: {
         c_id: [
@@ -118,7 +118,7 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (!this.iscidExist) {
-                console.log(this.iscidExist);
+                //console.log(this.iscidExist);
                 callback(new Error('当前客户编号不存在'))
               } else {
                 callback()
@@ -137,32 +137,40 @@ export default {
     findByName() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/stay_back/find?name=' + this.findName,
+        url: '/stay_back/find?name=' + this.findName,
         data: this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        this.checkoutData = res.data.data
+        if (res.data.code === 200) {
+          this.checkoutData = res.data.data
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
+        }
       })
     },
     insert(formname) {
       this.$refs[formname].validate((valid) => {
         if (valid) {
+          console.log(this.form);
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/stay_back/save',
+            url: '/stay_back/save',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
             console.log(res.data);
             if (res.data.code == 200 || res.data.code == 201) {
-              console.log("测试1" + res.data.data);
+              //console.log("测试1" + res.data.data);
               this.$message({
                 type: 'success',
                 message: res.data.message
               });
               this.getList();
               this.form = {}
-              // console.log("测试2" + this.checkinData);
+              // //console.log("测试2" + this.checkinData);
             }
             else {
               this.$message({
@@ -170,9 +178,9 @@ export default {
                 message: res.data.message
               });
             }
-            //console.log(res.data)
+            ////console.log(res.data)
             //this.checkinData = res.data.data
-            //  console.log(this.checkinData)
+            //  //console.log(this.checkinData)
           })
           this.dialogVisible = false
         }
@@ -187,6 +195,7 @@ export default {
     update(row) {
       this.dialogVisible = true
       this.form = row
+      console.log(this.form);
     },
     deleteInfo(row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
@@ -196,9 +205,9 @@ export default {
       }).then(() => {
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/stay_back/delete/' + row.stay_back_id,
+          url: '/stay_back/delete/' + row.stay_back_id,
           date: row.check_in_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
+          //headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
           this.$message({
             type: 'success',
@@ -216,12 +225,12 @@ export default {
     getList() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/stay_back/list',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/stay_back/list',
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        //console.log(res.data)
+        ////console.log(res.data)
         this.checkoutData = res.data.data
-        //console.log(this.checkinData[0])
+        ////console.log(this.checkinData[0])
       })
     },
     cancel() {
@@ -243,12 +252,16 @@ export default {
         if (newval && newval != '' && newval != undefined) {
           this.$axios({
             method: 'get',
-            url: 'http://localhost:8080/customer/findById/?id=' + this.form.c_id,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            url: '/customer/findById/?id=' + this.form.c_id,
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
-            // console.log(res.data)
+            // //console.log(res.data)
             if (res.data.code === 200) {
-              this.form = res.data.data
+              this.form.c_id = res.data.data.c_id
+              this.form.c_name = res.data.data.c_name
+              this.form.p_id = res.data.data.p_id
+              this.form.c_gender = res.data.data.c_gender
+              this.form.c_age = res.data.data.c_age
               this.iscidExist = true
             } else {
               this.iscidExist = false
@@ -257,11 +270,11 @@ export default {
               this.form.p_id = ''
               this.form.c_age = ''
             }
-            //console.log(this.checkinData[0])
+            ////console.log(this.checkinData[0])
           })
         }
         //do something
-        // console.log(this.form.c_id);
+        // //console.log(this.form.c_id);
       },
     }
   },
@@ -269,17 +282,6 @@ export default {
   created() {
     this.getList();
   },
-  filters: {
-    dateFormat: function (val) {
-      let date = new Date(val)
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      month = month >= 10 ? month : '0' + month
-      day = day >= 10 ? day : '0' + day
-      return year + '-' + month + '-' + day
-    }
-  }
 }
 </script>
 

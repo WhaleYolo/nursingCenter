@@ -114,16 +114,21 @@ export default {
   },
   methods: {
     findByName() {
-      console.log(this.findName);
+      //console.log(this.findName);
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/nursing/find?name=' + this.findName,
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/nursing/find?name=' + this.findName,
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data.code == 200) {
           this.nursingData = res.data.data
-          //console.log(this.checkinData);
+          ////console.log(this.checkinData);
+        } else {
+          this.$message({
+            type: 'error',
+            message: '查询失败'
+          });
         }
       })
     },
@@ -132,12 +137,12 @@ export default {
         if (valid) {
           this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/nursing/save',
+            url: '/nursing/save',
             data: this.form,
-            headers: { "Authorization": sessionStorage.getItem("token") }
+            //headers: { "Authorization": sessionStorage.getItem("token") }
           }).then((res) => {
 
-            //console.log(res.data);
+            ////console.log(res.data);
             if (res.data.code === 200 || res.data.code === 201) {
               this.$message({
                 type: 'success',
@@ -147,11 +152,11 @@ export default {
               this.getList()
               this.form = {}
               // this.checkinData.push(res.data.data)
-              // console.log("测试2" + this.checkinData);
+              // //console.log("测试2" + this.checkinData);
             }
-            //console.log(res.data)
+            ////console.log(res.data)
             //this.checkinData = res.data.data
-            //  console.log(this.checkinData)
+            //  //console.log(this.checkinData)
           })
           //this.$refs[form].resetFields();
           this.dialogVisible = false
@@ -186,9 +191,9 @@ export default {
       }).then(() => {
         this.$axios({
           method: 'delete',
-          url: 'http://localhost:8080/nursing/delete/' + row.nursing_item_id,
+          url: '/nursing/delete/' + row.nursing_item_id,
           date: row.nursing_item_id,
-          headers: { "Authorization": sessionStorage.getItem("token") }
+          //headers: { "Authorization": sessionStorage.getItem("token") }
         }).then((res) => {
           this.$message({
             type: 'success',
@@ -208,12 +213,12 @@ export default {
     getList() {
       this.$axios({
         method: 'get',
-        url: 'http://localhost:8080/nursing/list',
-        headers: { "Authorization": sessionStorage.getItem("token") }
+        url: '/nursing/list',
+        //headers: { "Authorization": sessionStorage.getItem("token") }
       }).then((res) => {
-        //console.log(res.data)
+        ////console.log(res.data)
         this.nursingData = res.data.data
-        //console.log(this.checkinData[0])
+        ////console.log(this.checkinData[0])
       })
     },
 
@@ -235,8 +240,8 @@ export default {
       if (this.findName.length == 0) {
         this.getList()
       }
-      //console.log(this.findName.length);
-      //console.log(this.$refs.passWords.value.length);
+      ////console.log(this.findName.length);
+      ////console.log(this.$refs.passWords.value.length);
     },
   },
 
@@ -252,15 +257,6 @@ export default {
         return '启用'
       }
     },
-    dateFormat: function (val) {
-      let date = new Date(val)
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      month = month >= 10 ? month : '0' + month
-      day = day >= 10 ? day : '0' + day
-      return year + '-' + month + '-' + day
-    }
   }
 }
 </script>
